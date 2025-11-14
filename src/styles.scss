@@ -166,7 +166,7 @@ mat-sidenav {
       active-indicator-color: var(--mat-sys-primary),
       active-indicator-shape: 6px,
       list-item-one-line-container-height: 40px,
-      list-item-label-text-color: red,
+      //list-item-label-text-color: red,
     )
   );
 }
@@ -181,4 +181,29 @@ mat-sidenav {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
   gap: 1rem;
+}
+
+/* src/styles.scss */
+.mat-mdc-list-item, .mat-list-item, .mdc-list-item {
+  cursor: pointer;
+}
+
+/* cible l'élément interne MDC quand on survole le mat-list-item */
+.mat-list-item .mdc-list-item:hover,
+.mat-mdc-list-item .mdc-list-item:hover,
+.mdc-list-item:hover {
+  background-color: #005cbb !important; /* tailwind gray-200 */
+  transition: background-color 160ms ease;
+  border-radius: 8px;
+}
+
+/* texte primaire */
+.mat-list-item .mdc-list-item__primary-text,
+.mat-mdc-list-item .mdc-list-item__primary-text {
+  transition: color 160ms ease;
+}
+
+.mat-list-item .mdc-list-item:hover .mdc-list-item__primary-text,
+.mat-mdc-list-item .mdc-list-item:hover .mdc-list-item__primary-text {
+  color: #111827 !important; /* gray-900 */
 }
