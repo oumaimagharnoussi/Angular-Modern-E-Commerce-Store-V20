@@ -22,6 +22,7 @@ import { EcommerceStore } from '../../ecommerce-store';
           <samp>\$ {{ total() }}</samp>
         </div>
       </div>  
+      <ng-content select="[actionButtons]"/>
       
     </div>
   `,
