@@ -9,12 +9,25 @@ import { MatDialog } from "@angular/material/dialog";
 import { SignInDialog } from "./components/sign-in-dialog/sign-in-dialog";
 import { SignInParams, SignUpParams, User } from "../models/user";
 import { Router } from "@angular/router";
+import { Order } from "../models/order";
+import { withStorageSync } from '@angular-architects/ngrx-toolkit';
 export type EcommerceState = {
     products : Product [];
     category : string;
     wishlistItems: Product[];
     cartItems: CartItem[];
     user: User | undefined;
+    loading: boolean;
+
+    shippingForm: {
+      firstName: string;
+      lastName: string;
+      address: string;
+      city: string;
+      state: string;
+      zip: string;
+    };
+
 };
 export const EcommerceStore = signalStore(
     {
@@ -159,7 +172,19 @@ export const EcommerceStore = signalStore(
         wishlistItems: [],
         cartItems: [],
         user: undefined,
+        loading:false,
+
+        shippingForm: {
+          firstName: '',
+          lastName: '',
+          address: '',
+          city: '',
+          state: '',
+          zip: '',
+        }
+
     } as EcommerceState),
+    withStorageSync({ key: 'modern-store', select: ({ wishlistItems, cartItems, user }) => ({ wishlistItems, cartItems, user})}),
     withComputed(({category, products, wishlistItems, cartItems}) => ({
         filteredProducts: computed(()=>{
             if (category() === 'all') 
@@ -239,17 +264,75 @@ export const EcommerceStore = signalStore(
         });
         },
         proceedToCheckout: () => {
-          if (!store.user()){
-         matDialog.open(SignInDialog, {
-          disableClose: true,
-          data: {
-            checkout: true
+
+          const total = Math.round(
+            store.cartItems().reduce((acc, item) => acc + item.quantity * item.product.price, 0)
+          );
+
+          if (total <= 0) {
+            toaster.error('Your cart is empty');
+            return;
           }
-         });
-         return;
-        }
-        router.navigate(['/checkout']);
+
+
+          if (!store.user()){
+            matDialog.open(SignInDialog, {
+              disableClose: true,
+              data: { checkout: true }
+            });
+            return;
+          }
+
+          
+          router.navigate(['/checkout']);
         },
+
+
+        updateShippingForm: (field: string, value: string) => {
+          patchState(store, {
+            shippingForm: {
+              ...store.shippingForm(),
+              [field]: value
+            }
+          });
+        },
+
+        placeOrder: async () => {
+          patchState(store, { loading: true });
+    
+          const user = store.user();
+          if (!user) {
+            toaster.error('Please login before placing order');
+            patchState(store, { loading: false });
+            return;
+          }
+    
+          const f = store.shippingForm();
+    
+          
+          if (!f.firstName || !f.lastName || !f.address || !f.city || !f.state || !f.zip) {
+            toaster.error("Please complete all shipping information");
+            patchState(store, { loading: false });
+            return;
+          }
+    
+          const order: Order = {
+            id: crypto.randomUUID(),
+            userId: user.id,
+            total: Math.round(
+              store.cartItems().reduce((acc, item) => acc + item.quantity * item.product.price, 0)
+            ),
+            items: store.cartItems(),
+            paymentStatus: 'success',
+          };
+    
+          await new Promise(res => setTimeout(res, 1000));
+    
+          patchState(store, { loading: false, cartItems: [] });
+          router.navigate(['order-success']);
+        },
+
+
         signIn:({ email, password, checkout, dialogId }: SignInParams) => {
           patchState(store, {
             user: {
