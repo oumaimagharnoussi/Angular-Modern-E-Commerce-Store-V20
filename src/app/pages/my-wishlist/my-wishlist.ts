@@ -26,7 +26,7 @@ import { EmptyWishlist } from "./empty-wishlist/empty-wishlist";
               mat-icon-button
               (click)="store.removeFromWishlist(product)"
               >
-              <mat-icon>delete </mat-icon>
+              <mat-icon>delete</mat-icon>
               </button>
            </app-product-card>
           }
