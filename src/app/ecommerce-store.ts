@@ -11,6 +11,7 @@ import { SignInParams, SignUpParams, User } from "../models/user";
 import { Router } from "@angular/router";
 import { Order } from "../models/order";
 import { withStorageSync } from '@angular-architects/ngrx-toolkit';
+import { AddReviewParams, UserReview } from "../models/user-review";
 export type EcommerceState = {
     products : Product [];
     category : string;
@@ -19,6 +20,7 @@ export type EcommerceState = {
     user: User | undefined;
     loading: boolean;
     selectedProductId: string | undefined;
+    writeReview: boolean;
 
     shippingForm: {
       firstName: string;
@@ -45,7 +47,42 @@ export const EcommerceStore = signalStore(
       rating: 4.8,
       reviewCount: 120,
       inStock: true,
-      category: 'electronics'
+      category: 'electronics',
+      reviews:[{
+        id: '1-1',
+        productId: '1',
+        userName: 'Nova Wilson',
+        userImageUrl: 'https://randomuser.me/api/portraits/women/44.jpg',
+        rating: 5,
+        title: 'Amazing sound quality',
+        comment:
+          'Crystal clear audio with deep bass. Noise cancellation works perfectly even in busy environments.',
+        reviewDate: new Date('2024-01-14'),
+      },
+      {
+        id: '1-2',
+        productId: '1',
+        userName: 'Liam Carter',
+        userImageUrl: 'https://randomuser.me/api/portraits/men/32.jpg',
+        rating: 4,
+        title: 'Very comfortable',
+        comment:
+          'I use them for long work sessions and they remain super comfortable. Battery lasts a long time.',
+        reviewDate: new Date('2024-02-03'),
+      },
+      {
+        id: '1-3',
+        productId: '1',
+        userName: 'Ava Mitchell',
+        userImageUrl: 'https://randomuser.me/api/portraits/women/65.jpg',
+        rating: 5,
+        title: 'Perfect for travel',
+        comment:
+          'Used them on a long flight, the noise cancellation is exceptional. Highly recommended!',
+        reviewDate: new Date('2024-03-12'),
+      },
+        
+      ]
     },
     {
       id: '2',
@@ -56,7 +93,42 @@ export const EcommerceStore = signalStore(
       rating: 4.6,
       reviewCount: 85,
       inStock: true,
-      category: 'electronics'
+      category: 'electronics',
+      reviews: [
+      {
+        id: '2-1',
+        productId: '2',
+        userName: 'Ethan Parker',
+        userImageUrl: 'https://randomuser.me/api/portraits/men/77.jpg',
+        rating: 5,
+        title: 'Stunning picture quality',
+        comment:
+          'The OLED blacks are incredible and HDR looks beautiful. Movies feel cinematic at home.',
+        reviewDate: new Date('2024-01-28'),
+      },
+      {
+        id: '2-2',
+        productId: '2',
+        userName: 'Sophia Turner',
+        userImageUrl: 'https://randomuser.me/api/portraits/women/29.jpg',
+        rating: 4,
+        title: 'Easy to use',
+        comment:
+          'The built-in apps are fast and responsive. Setup took only a few minutes.',
+        reviewDate: new Date('2024-02-17'),
+      },
+      {
+        id: '2-3',
+        productId: '2',
+        userName: 'Oliver Brown',
+        userImageUrl: 'https://randomuser.me/api/portraits/men/45.jpg',
+        rating: 5,
+        title: 'Great for gaming',
+        comment:
+          'Low latency and vibrant colors. PS5 games look absolutely stunning on this TV.',
+        reviewDate: new Date('2024-03-08'),
+      },
+    ],
     },
     {
       id: '3',
@@ -67,7 +139,29 @@ export const EcommerceStore = signalStore(
       rating: 4.7,
       reviewCount: 200,
       inStock: true,
-      category: 'electronics'
+      category: 'electronics',
+      reviews: [
+      {
+        id: '3-1',
+        userName: 'Daniel Harris',
+        userImageUrl: 'https://randomuser.me/api/portraits/men/36.jpg',
+        rating: 5,
+        title: 'Incredible image quality',
+        comment:
+          'Photos are super sharp even in low light. Perfect for professional work.',
+        reviewDate: new Date('2024-03-01'),
+      },
+      {
+        id: '3-2',
+        userName: 'Ella Rose',
+        userImageUrl: 'https://randomuser.me/api/portraits/women/12.jpg',
+        rating: 4,
+        title: 'Great for video',
+        comment:
+          '4K footage looks amazing, autofocus is fast and reliable during shoots.',
+        reviewDate: new Date('2024-02-10'),
+      },
+    ],
     },
     {
       id: '4',
@@ -78,7 +172,27 @@ export const EcommerceStore = signalStore(
       rating: 4.5,
       reviewCount: 60,
       inStock: true,
-      category: 'clothing'
+      category: 'clothing',
+    reviews: [
+      {
+        id: '4-1',
+        userName: 'Mia Thompson',
+        userImageUrl: 'https://randomuser.me/api/portraits/women/40.jpg',
+        rating: 5,
+        title: 'Very stylish',
+        comment: 'Fits perfectly and looks great with almost any outfit.',
+        reviewDate: new Date('2024-01-20'),
+      },
+      {
+        id: '4-2',
+        userName: 'James Hunt',
+        userImageUrl: 'https://randomuser.me/api/portraits/men/61.jpg',
+        rating: 4,
+        title: 'Good quality',
+        comment: 'Material feels durable, color is exactly like photos.',
+        reviewDate: new Date('2024-02-05'),
+      },
+      ],
     },
     {
       id: '5',
@@ -89,7 +203,27 @@ export const EcommerceStore = signalStore(
       rating: 4.6,
       reviewCount: 95,
       inStock: true,
-      category: 'clothing'
+      category: 'clothing',
+    reviews: [
+      {
+        id: '5-1',
+        userName: 'Lucas Martin',
+        userImageUrl: 'https://randomuser.me/api/portraits/men/80.jpg',
+        rating: 5,
+        title: 'Great value',
+        comment: 'Soft fabric and perfect fit. Excellent for daily wear.',
+        reviewDate: new Date('2024-02-15'),
+      },
+      {
+        id: '5-2',
+        userName: 'Chloe Adams',
+        userImageUrl: 'https://randomuser.me/api/portraits/women/11.jpg',
+        rating: 4,
+        title: 'Good quality shirts',
+        comment: 'Comfortable and breathable. Colors hold well after washing.',
+        reviewDate: new Date('2024-01-28'),
+      },
+    ],
     },
     {
       id: '6',
@@ -100,7 +234,27 @@ export const EcommerceStore = signalStore(
       rating: 4.6,
       reviewCount: 40,
       inStock: true,
-      category: 'clothing'
+      category: 'clothing',
+    reviews: [
+      {
+        id: '6-1',
+        userName: 'Emma Rivera',
+        userImageUrl: 'https://randomuser.me/api/portraits/women/48.jpg',
+        rating: 5,
+        title: 'Warm and elegant',
+        comment: 'Perfect for winter. Keeps me warm without feeling heavy.',
+        reviewDate: new Date('2024-01-10'),
+      },
+      {
+        id: '6-2',
+        userName: 'Noah Jackson',
+        userImageUrl: 'https://randomuser.me/api/portraits/men/14.jpg',
+        rating: 4,
+        title: 'Good material',
+        comment: 'Quality wool and comfortable fit. Worth the price.',
+        reviewDate: new Date('2024-03-02'),
+      },
+    ],
     },
     {
       id: '7',
@@ -111,7 +265,27 @@ export const EcommerceStore = signalStore(
       rating: 4.7,
       reviewCount: 40,
       inStock: true,
-      category: 'accessories'
+      category: 'accessories',
+    reviews: [
+      {
+        id: '7-1',
+        userName: 'Ryan Coleman',
+        userImageUrl: 'https://randomuser.me/api/portraits/men/23.jpg',
+        rating: 5,
+        title: 'Elegant and durable',
+        comment: 'Looks classy and the leather strap feels premium.',
+        reviewDate: new Date('2024-02-08'),
+      },
+      {
+        id: '7-2',
+        userName: 'Sophia Brooks',
+        userImageUrl: 'https://randomuser.me/api/portraits/women/21.jpg',
+        rating: 4,
+        title: 'Nice watch',
+        comment: 'Great build quality but the strap is a bit stiff at first.',
+        reviewDate: new Date('2024-01-22'),
+      },
+    ],
     },
     {
       id: '8',
@@ -122,7 +296,27 @@ export const EcommerceStore = signalStore(
       rating: 4.6,
       reviewCount: 50,
       inStock: true,
-      category: 'accessories'
+      category: 'accessories',
+    reviews: [
+      {
+        id: '8-1',
+        userName: 'Zoe Carter',
+        userImageUrl: 'https://randomuser.me/api/portraits/women/90.jpg',
+        rating: 5,
+        title: 'Stylish and comfortable',
+        comment: 'Perfect fit and great sun protection.',
+        reviewDate: new Date('2024-01-27'),
+      },
+      {
+        id: '8-2',
+        userName: 'Jacob Gray',
+        userImageUrl: 'https://randomuser.me/api/portraits/men/12.jpg',
+        rating: 4,
+        title: 'Good sunglasses',
+        comment: 'Very comfortable but the case could be better.',
+        reviewDate: new Date('2024-02-14'),
+      },
+    ],
     },
     {
       id: '9',
@@ -133,7 +327,27 @@ export const EcommerceStore = signalStore(
       rating: 4.5,
       reviewCount: 5,
       inStock: true,
-      category: 'accessories'
+      category: 'accessories',
+    reviews: [
+      {
+        id: '9-1',
+        userName: 'Patrick Meyer',
+        userImageUrl: 'https://randomuser.me/api/portraits/men/50.jpg',
+        rating: 5,
+        title: 'Top-notch leather',
+        comment: 'Feels premium and smells like real leather. Lots of space.',
+        reviewDate: new Date('2024-03-05'),
+      },
+      {
+        id: '9-2',
+        userName: 'Amelia Scott',
+        userImageUrl: 'https://randomuser.me/api/portraits/women/17.jpg',
+        rating: 4,
+        title: 'Good wallet',
+        comment: 'Compact and elegant. Could use an extra slot though.',
+        reviewDate: new Date('2024-02-12'),
+      },
+    ],
     },
     {
       id: '10',
@@ -144,7 +358,27 @@ export const EcommerceStore = signalStore(
       rating: 4.7,
       reviewCount: 50,
       inStock: true,
-      category: 'home'
+      category: 'home',
+    reviews: [
+      {
+        id: '10-1',
+        userName: 'Emily Fox',
+        userImageUrl: 'https://randomuser.me/api/portraits/women/14.jpg',
+        rating: 5,
+        title: 'Love the automation',
+        comment: 'Brews coffee automatically when I wake up. Amazing!',
+        reviewDate: new Date('2024-01-19'),
+      },
+      {
+        id: '10-2',
+        userName: 'Luke Harper',
+        userImageUrl: 'https://randomuser.me/api/portraits/men/28.jpg',
+        rating: 4,
+        title: 'Good but noisy',
+        comment: 'Coffee tastes great but the machine is a little loud.',
+        reviewDate: new Date('2024-02-02'),
+      },
+    ],
     },
     {
       id: '11',
@@ -155,7 +389,27 @@ export const EcommerceStore = signalStore(
       rating: 4.8,
       reviewCount: 30,
       inStock: true,
-      category: 'home'
+      category: 'home',
+    reviews: [
+      {
+        id: '11-1',
+        userName: 'Olivia Bennett',
+        userImageUrl: 'https://randomuser.me/api/portraits/women/45.jpg',
+        rating: 5,
+        title: 'Huge difference',
+        comment: 'Air feels fresher and my allergies are much better.',
+        reviewDate: new Date('2024-01-14'),
+      },
+      {
+        id: '11-2',
+        userName: 'Henry Lewis',
+        userImageUrl: 'https://randomuser.me/api/portraits/men/65.jpg',
+        rating: 4,
+        title: 'Quiet and efficient',
+        comment: 'Works well and very silent at night.',
+        reviewDate: new Date('2024-02-20'),
+      },
+    ],
     },
     {
       id: '12',
@@ -166,7 +420,28 @@ export const EcommerceStore = signalStore(
       rating: 4.6,
       reviewCount: 40,
       inStock: false,
-      category: 'home'
+      category: 'home',
+    reviews: [
+      {
+        id: '12-1',
+        userName: 'Leo Anderson',
+        userImageUrl: 'https://randomuser.me/api/portraits/men/94.jpg',
+        rating: 5,
+        title: 'Cleans very well',
+        comment: 'Picks up pet hair and dust easily. Great mapping.',
+        reviewDate: new Date('2024-01-23'),
+      },
+      {
+        id: '12-2',
+        userName: 'Sienna White',
+        userImageUrl: 'https://randomuser.me/api/portraits/women/55.jpg',
+        rating: 4,
+        title: 'Good robot vacuum',
+        comment:
+          'Cleans efficiently but sometimes gets stuck under low furniture.',
+        reviewDate: new Date('2024-02-11'),
+      },
+    ],
     }
         ],
         category:'all',
@@ -175,6 +450,7 @@ export const EcommerceStore = signalStore(
         user: undefined,
         loading:false,
         selectedProductId: undefined,
+        writeReview:false,
 
         shippingForm: {
           firstName: '',
@@ -371,6 +647,48 @@ export const EcommerceStore = signalStore(
         },
         signOut: () => {
           patchState(store, { user: undefined });
+        },
+        showWriteReview: () => {
+          patchState(store, {writeReview: true});
+        },
+        hideWriteReview: () => {
+          patchState(store, {writeReview: false});
+        },
+        addReview: async ({ title, comment, rating }: AddReviewParams) => {
+          patchState(store, { loading: true });
+          const product = store.products().find((p) => p.id === store.selectedProductId());
+          if(!product){
+            
+            patchState(store, { loading: false });
+            return;
+          }
+          const review: UserReview = {
+            id: crypto.randomUUID(),
+            title,
+            comment,
+            rating,
+            productId: product.id,
+            userName : store.user()?.name || '',
+            userImageUrl : store.user()?.imageUrl || '',
+            reviewDate: new Date(),
+          };
+          const updatedProducts = produce(store.products(), (draft) => {
+  const index = draft.findIndex((p) => p.id === product.id);
+
+  draft[index].reviews.push(review);
+
+  draft[index].rating =
+    Math.round(
+      (
+        draft[index].reviews.reduce((acc, r) => acc + r.rating, 0) /
+        draft[index].reviews.length
+      ) * 10
+    ) / 10;
+
+  draft[index].reviewCount = draft[index].reviews.length;
+});
+await new Promise((resolve) => setTimeout(resolve, 1000));
+patchState(store, { loading: false, products: updatedProducts, writeReview: false});
         },
     }))
 ); 
