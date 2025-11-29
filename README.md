@@ -1,6 +1,4 @@
 # NgEcommerce
-💻 Live demo: https://ngx-fullstack-ecommerce.vercel.app/products/all
-
 This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 20.3.10.
 
 ## Development server
